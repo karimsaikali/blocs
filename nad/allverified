@@ -1,0 +1,39 @@
+var log = require("log");
+log.setLevel("info");
+
+function check(conditions) {
+ 
+    try {
+        var ctx = "";
+        for (var key in request.parameters){
+            ctx += "var " + key + " = request.parameters." + key + "; "; 
+        }
+
+        ctx = eval(ctx);
+        var res = true;
+        for (var i = 0; i < conditions.length; i++) {
+            
+            if (conditions[i].indexOf(" in ") > -1) {
+            
+                var expr = "";
+                var tokens = conditions[i].split(" in "); 
+                conditions[i] = tokens[1] + ".indexOf(" + eval(tokens[0]) + ") > -1";
+            }
+            
+            if (conditions[i].indexOf(" contains ") > -1) {
+            
+                var expr = "";
+                var tokens = conditions[i].split(" contains ");
+                conditions[i] = tokens[0] + ".indexOf(" + tokens[1] + ") > -1"; 
+            }
+           
+            res = res && eval(conditions[i]); log.info(res);
+        }
+        
+        return res; 
+    }catch(error) {
+
+        log.error(JSON.stringify(error));
+        return false;
+    }
+}
