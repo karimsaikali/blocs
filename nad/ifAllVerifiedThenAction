@@ -1,0 +1,6 @@
+var list;
+
+
+list = ['temp < 23', 'hum <= 55', 'light == "true"', 'step in [1, 2, 3, 4]', 'deviceId contains "edge"'];
+if (require("./allverified").check(list)) {
+  return 'AC_ON'}
